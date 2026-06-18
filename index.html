@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Metal OS / Welding OS v0.6</title>
+  <title>Metal OS / Welding OS v0.8</title>
   <style>
     :root{
       --bg:#f2f0ea;--card:#ffffff;--card2:#f8f6f1;--text:#171717;--muted:#68635b;--line:#ddd6c8;
@@ -32,6 +32,23 @@
     .section-list{display:grid;gap:9px}.line-card{border:1px solid var(--line);border-radius:15px;background:#fff;padding:12px}.line-card h4{margin:0 0 8px;font-size:15px}.line-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px}.line-grid div{background:var(--card2);border-radius:10px;padding:7px}.line-grid b{display:block;font-size:11px;color:var(--muted);margin-bottom:2px}.risk{border-radius:13px;padding:10px 12px;margin:8px 0;font-size:14px;line-height:1.35}.risk.high{background:#fff0f0;border-left:4px solid var(--bad)}.risk.mid{background:#fff6e8;border-left:4px solid var(--warn)}.risk.low{background:#edf8f0;border-left:4px solid var(--ok)}.risk.info{background:#edf3ff;border-left:4px solid var(--info)}
     .validation{display:none;border:1px solid #f0c4c4;background:#fff3f3;border-radius:15px;padding:12px;margin:10px 0;color:#7b1b1b}.validation ul{margin:8px 0 0;padding-left:18px}.validation li{margin:5px 0}.note{background:#f9f7f0;border-left:4px solid #111;border-radius:12px;padding:10px 12px;font-size:13px;color:#333;line-height:1.4}.quote{white-space:pre-wrap;background:#111;color:#f0f0f0;border-radius:16px;padding:14px;font-family:"Courier New",monospace;font-size:13px;line-height:1.5;max-height:420px;overflow:auto}.copy-msg{display:none;font-size:13px;color:var(--ok);margin-top:8px}.footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.5;margin:18px 0 6px}.hidden{display:none!important}
     details{border:1px solid var(--line);border-radius:16px;background:#fff;padding:10px 12px;margin:10px 0}summary{font-weight:800;cursor:pointer}.muted{color:var(--muted)}
+    /* ── Схемы SVG ── */
+    .scheme-wrap{display:grid;gap:12px}
+    .scheme-box{border:1px solid var(--line);border-radius:15px;background:#fff;overflow:hidden}
+    .scheme-title{display:flex;align-items:baseline;gap:8px;padding:10px 14px 6px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+    .scheme-title strong{font-size:14px;font-weight:800}
+    .scheme-title span{font-size:12px;color:var(--muted)}
+    .scheme-svg{display:block;width:100%;height:auto;padding:8px 4px}
+    /* Элементы внутри SVG */
+    .scheme-element{stroke:#111;stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+    .scheme-thin{stroke:#888;stroke-width:1;fill:none;stroke-dasharray:none}
+    .scheme-dim{stroke:#aaa;stroke-width:1;fill:none;stroke-dasharray:4 3}
+    .scheme-post{stroke:#111;stroke-width:2;fill:#fff}
+    .scheme-fill{fill:#c8dff0;stroke:#6aa0c8;stroke-width:1}
+    .scheme-label{font-size:11px;fill:#111;font-weight:700;font-family:inherit}
+    .scheme-small{font-size:10px;fill:#555;font-family:inherit}
+    .scheme-warn{font-size:10px;fill:#9a3a00;font-weight:700;font-family:inherit}
+    polyline.scheme-element{fill:none}
     @media(max-width:560px){body{padding-left:8px;padding-right:8px}.grid2,.grid3{grid-template-columns:1fr}.type-grid,.preset-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.line-grid{grid-template-columns:1fr 1fr}.card{padding:13px}.price-hero strong{font-size:26px}}
     @media(max-width:380px){.metrics,.line-grid{grid-template-columns:1fr}h1{font-size:20px}input,select,textarea,button{font-size:15px;padding:11px}.sticky-actions .inner{grid-template-columns:1fr 1fr}}
     @media print{body{background:#fff;padding:0}.sticky-actions,header,.no-print{display:none!important}.card{box-shadow:none;border-color:#ddd;break-inside:avoid}.app{max-width:none}.quote{max-height:none;color:#111;background:#fff;border:1px solid #ddd}}
@@ -41,7 +58,7 @@
 <header>
   <div class="head-inner">
     <h1>Metal OS / Welding OS</h1>
-    <div class="sub">v0.6 · мобильный расчёт: навесы, перила, лестницы</div>
+    <div class="sub">v0.8 · расчёт + автосхема: навесы, перила, лестницы</div>
   </div>
 </header>
 <div class="app">
@@ -121,24 +138,30 @@
     </div>
   </section>
 
+  <section class="card" id="schemeCard">
+    <h2>8. Схема по размерам</h2>
+    <p class="mini">Схема строится автоматически по введённым размерам. Это предварительная схема для понимания конструкции и согласования с клиентом, не инженерный чертёж.</p>
+    <div id="schemeContainer" class="scheme-wrap"><p class="mini">Нажмите «Рассчитать».</p></div>
+  </section>
+
   <section class="card" id="specCard">
-    <h2>8. Закупка по профилям</h2>
+    <h2>9. Закупка по профилям</h2>
     <div id="purchaseList" class="section-list"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="timeCard">
-    <h2>9. Время по операциям</h2>
+    <h2>10. Время по операциям</h2>
     <div id="timeList" class="section-list"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="risksCard">
-    <h2>10. Риски и рекомендации</h2>
+    <h2>11. Риски и рекомендации</h2>
     <div class="note">Предварительная проверка рисков. Не является инженерным заключением. Для ответственных конструкций нужен расчёт специалиста.</div>
     <div id="riskList"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="quoteCard">
-    <h2>11. КП для клиента</h2>
+    <h2>12. КП для клиента</h2>
     <div id="quoteText" class="quote">Нажмите «Рассчитать», затем скопируйте КП.</div>
     <div class="top-actions no-print">
       <button class="btn" type="button" id="copyQuoteBtn">Скопировать КП</button>
@@ -149,7 +172,7 @@
 
   <div class="footer">
     Metal OS / Welding OS<br>
-    Версия: v0.6 · Статус: test MVP<br>
+    Версия: v0.8 · Статус: test MVP<br>
     Дата сборки: 2026-06-18<br>
     Расчёт предварительный и не заменяет инженерное заключение.
   </div>
@@ -167,7 +190,7 @@
   'use strict';
 
   const BUILD_DATE = '2026-06-18';
-  const STORAGE_KEY = 'metal_os_v06_settings';
+  const STORAGE_KEY = 'metal_os_v08_settings';
   const STICK_LENGTH = 6;
 
   const PROFILE_CATALOG = [
@@ -713,7 +736,7 @@
   function clearValidation(){ renderValidation({errors:[],warnings:[]}); }
   function clearResults(){
     $('clientPrice').textContent='—'; $('totalNeeded').textContent='—'; $('totalSticks').textContent='—'; $('totalLeftover').textContent='—'; $('totalWeight').textContent='—'; $('totalHours').textContent='—'; $('totalDays').textContent='—';
-    $('purchaseList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('timeList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('riskList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('quoteText').textContent='Исправьте данные и повторите расчёт.';
+    $('schemeContainer').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('purchaseList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('timeList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('riskList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('quoteText').textContent='Исправьте данные и повторите расчёт.';
   }
   function renderResult(r){
     $('clientPrice').textContent = money(r.clientPrice);
@@ -730,6 +753,7 @@
     } else {
       $('riskList').innerHTML = `<div class="risk low"><strong>Низкий риск:</strong> критичных предупреждений не выявлено по предварительной проверке.</div>`;
     }
+    renderScheme(r);
     $('quoteText').textContent = generateQuote(r);
   }
   function additionalMaterialsHtml(r){
@@ -744,6 +768,147 @@
     if(r.product==='Перила') return [`Длина: ${fmt(p.length,2)} м`,`Высота: ${fmt(p.height,2)} м`,`Шаг стоек: ${fmt(p.postStep,2)} м`,`Тип: ${p.railingType}`,`Заполнение: ${p.fillInfo}`,`Крепление: ${p.mountType}`,`Запас на резку: ${fmt(p.waste,0)}%`,`Покраска: ${p.paint?'да':'нет'}`,`Монтаж: ${p.mount?'да':'нет'}`];
     return [`Высота подъёма: ${fmt(p.totalHeight,2)} м`,`Длина проекции: ${fmt(p.projection,2)} м`,`Ширина: ${fmt(p.stairWidth,2)} м`,`Ступеней: ${p.steps}`,`Высота ступени: ${fmt(p.rise,2)} м`,`Глубина ступени: ${fmt(p.run,2)} м`,`Угол: ${fmt(p.angle,1)}°`,`Тип: ${p.stairType}`,`Материал ступеней: ${p.stepMaterial}`,`Перила: ${p.hasRailing?'да':'нет'}`,`Запас на резку: ${fmt(p.waste,0)}%`,`Покраска: ${p.paint?'да':'нет'}`,`Монтаж: ${p.mount?'да':'нет'}`];
   }
+
+  function escSvg(value){
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+  function svgText(x,y,text,cls='scheme-label',anchor='middle'){
+    return `<text x="${x}" y="${y}" text-anchor="${anchor}" class="${cls}">${escSvg(text)}</text>`;
+  }
+  function svgLine(x1,y1,x2,y2,cls='scheme-element'){
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${cls}"/>`;
+  }
+  function svgRect(x,y,w,h,cls='scheme-thin'){
+    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="${cls}"/>`;
+  }
+  function svgCircle(x,y,r,cls='scheme-post'){
+    return `<circle cx="${x}" cy="${y}" r="${r}" class="${cls}"/>`;
+  }
+  function svgPolyline(points,cls='scheme-element'){
+    return `<polyline points="${points.map(p=>p.join(',')).join(' ')}" class="${cls}"/>`;
+  }
+  function svgDimLine(x1,y1,x2,y2,label){
+    const midX=(x1+x2)/2, midY=(y1+y2)/2;
+    const textY = Math.abs(y1-y2) < 1 ? midY-6 : midY;
+    const textX = Math.abs(x1-x2) < 1 ? midX+12 : midX;
+    return `${svgLine(x1,y1,x2,y2,'scheme-dim')}${svgText(textX,textY,label,'scheme-small', Math.abs(x1-x2)<1 ? 'start' : 'middle')}`;
+  }
+  function schemeBox(title, subtitle, svg){
+    return `<div class="scheme-box"><div class="scheme-title"><strong>${escSvg(title)}</strong><span>${escSvg(subtitle)}</span></div>${svg}</div>`;
+  }
+  function wrapSvg(viewBox, inner){
+    return `<svg class="scheme-svg" viewBox="${viewBox}" role="img" aria-label="Схема по размерам" preserveAspectRatio="xMidYMid meet">${inner}</svg>`;
+  }
+  function renderScheme(r){
+    const el = $('schemeContainer');
+    if(!el || !r){ return; }
+    let html = '';
+    if(r.product === 'Навес') html = renderNavesScheme(r);
+    else if(r.product === 'Перила') html = renderPerilaScheme(r);
+    else if(r.product === 'Лестница') html = renderLestnicaScheme(r);
+    else html = '<p class="mini">Схема для этого изделия пока не поддерживается.</p>';
+    el.innerHTML = html + '<div class="note">Схема предварительная. Не является чертежом КМ/КМД и не заменяет инженерный расчёт.</div>';
+  }
+  function renderNavesScheme(r){
+    const p = r.params;
+    const W = Math.max(0.1, p.width), D = Math.max(0.1, p.depth), H = Math.max(0.1, p.height);
+    const boxW = 240, boxH = 135, x0 = 45, y0 = 38;
+    const postCount = Math.max(2, Math.round(p.posts || 4));
+    const crossCount = Math.max(2, Math.ceil(D / Math.max(0.3, p.crossStep)) + 1);
+    let top = '';
+    top += svgRect(x0,y0,boxW,boxH,'scheme-element');
+    for(let i=1;i<crossCount-1;i++){
+      const x = x0 + (boxW * i / (crossCount-1));
+      top += svgLine(x,y0,x,y0+boxH,'scheme-thin');
+    }
+    const posts=[];
+    if(postCount<=2){ posts.push([x0,y0+boxH],[x0+boxW,y0+boxH]); }
+    else if(postCount===4){ posts.push([x0,y0],[x0+boxW,y0],[x0,y0+boxH],[x0+boxW,y0+boxH]); }
+    else {
+      const front = Math.ceil(postCount/2), back = Math.floor(postCount/2);
+      for(let i=0;i<front;i++) posts.push([x0 + boxW*i/Math.max(1,front-1), y0+boxH]);
+      for(let i=0;i<back;i++) posts.push([x0 + boxW*i/Math.max(1,back-1), y0]);
+    }
+    posts.slice(0,16).forEach(pt=> top += svgCircle(pt[0],pt[1],4));
+    top += svgDimLine(x0,y0+boxH+22,x0+boxW,y0+boxH+22,`ширина ${fmt(W,2)} м`);
+    top += svgDimLine(x0-18,y0,x0-18,y0+boxH,`вылет ${fmt(D,2)} м`);
+    top += svgText(x0+boxW/2,24,`Вид сверху · стойки: ${postCount} · поперечины: ${crossCount}`,'scheme-label');
+    const topSvg = wrapSvg('0 0 330 220', top);
+
+    const sx0=55, sy0=165, sx1=280, sy1=92;
+    let side = '';
+    side += svgLine(sx0,sy0,sx0,70,'scheme-element');
+    side += svgLine(sx0,70,sx1,sy1,'scheme-element');
+    side += svgLine(sx1,sy1,sx1,sy0,'scheme-thin');
+    side += svgLine(sx0,sy0,sx1,sy0,'scheme-thin');
+    side += `<polygon points="${sx0},70 ${sx1},${sy1} ${sx1},${sy1+12} ${sx0},82" class="scheme-fill" opacity="0.45"/>`;
+    side += svgDimLine(sx0-18,sy0,sx0-18,70,`высота ${fmt(H,2)} м`);
+    side += svgDimLine(sx0,sy0+22,sx1,sy0+22,`вылет ${fmt(D,2)} м`);
+    side += svgText(165,34,'Вид сбоку · условный уклон','scheme-label');
+    side += svgText(220,84,p.coverName || 'покрытие','scheme-small');
+    const sideSvg = wrapSvg('0 0 330 220', side);
+    return schemeBox('Навес — вид сверху', `${fmt(W,2)}×${fmt(D,2)} м`, topSvg) + schemeBox('Навес — вид сбоку', `высота ${fmt(H,2)} м`, sideSvg);
+  }
+  function renderPerilaScheme(r){
+    const p = r.params;
+    const L = Math.max(0.1,p.length), H = Math.max(0.1,p.height), postStep = Math.max(0.3,p.postStep || 1);
+    const postsCount = Math.ceil(L/postStep)+1;
+    const x0=38, yTop=55, w=254, h=105, yBot=yTop+h;
+    let s='';
+    s += svgLine(x0,yTop,x0+w,yTop,'scheme-element');
+    s += svgLine(x0,yBot,x0+w,yBot,'scheme-thin');
+    for(let i=0;i<postsCount;i++){
+      const x=x0 + w*i/Math.max(1,postsCount-1);
+      s += svgLine(x,yTop,x,yBot,'scheme-element');
+    }
+    if(String(p.fillInfo||'').includes('вертик')){
+      const count = Math.min(16, Math.max(2, Math.ceil(L/Math.max(0.12, inputNumber('fillStep',0.15)))));
+      for(let i=1;i<count;i++){
+        const x=x0 + w*i/count;
+        s += svgLine(x,yTop+15,x,yBot-12,'scheme-thin');
+      }
+    } else if(String(p.fillInfo||'').includes('гориз')){
+      const rows = Math.min(6, Math.max(1, Math.round(inputNumber('horizontalRows',3))));
+      for(let i=1;i<=rows;i++){
+        const y=yTop + h*i/(rows+1);
+        s += svgLine(x0,y,x0+w,y,'scheme-thin');
+      }
+    }
+    s += svgDimLine(x0,yBot+24,x0+w,yBot+24,`длина ${fmt(L,2)} м`);
+    s += svgDimLine(x0-18,yTop,x0-18,yBot,`высота ${fmt(H,2)} м`);
+    s += svgText(x0+w/2,30,`Вид спереди · стойки: ${postsCount}`,'scheme-label');
+    s += svgText(x0+w/2,190,`шаг стоек ${fmt(postStep,2)} м · ${p.fillInfo}`,'scheme-small');
+    return schemeBox('Перила — вид спереди', `${fmt(L,2)} м · ${fmt(H,2)} м`, wrapSvg('0 0 330 215', s));
+  }
+  function renderLestnicaScheme(r){
+    const p = r.params;
+    const height = Math.max(0.1,p.totalHeight), projection=Math.max(0.1,p.projection), steps=Math.max(2,Math.round(p.steps||2));
+    const x0=66, y0=170, w=217, h=120;
+    let s='';
+    const pts=[];
+    for(let i=0;i<=steps;i++){
+      const x=x0 + w*i/steps;
+      const y=y0 - h*i/steps;
+      if(i===0) pts.push([x,y]);
+      else { pts.push([x, pts[pts.length-1][1]]); pts.push([x,y]); }
+    }
+    s += svgPolyline(pts,'scheme-element');
+    s += svgLine(x0,y0,x0+w,y0-h,'scheme-element');
+    s += svgLine(x0,y0,x0+w,y0,'scheme-thin');
+    s += svgLine(x0+w,y0,x0+w,y0-h,'scheme-thin');
+    if(p.hasRailing){
+      s += svgLine(x0+10,y0-28,x0+w-5,y0-h-28,'scheme-thin');
+      s += svgLine(x0+25,y0-15,x0+25,y0-42,'scheme-thin');
+      s += svgLine(x0+w-25,y0-h-15,x0+w-25,y0-h-42,'scheme-thin');
+    }
+    s += svgDimLine(x0,y0+24,x0+w,y0+24,`проекция ${fmt(projection,2)} м`);
+    s += svgDimLine(x0-18,y0-h,x0-18,y0,`подъём ${fmt(height,2)} м`);
+    s += svgText(165,26,`Боковая схема · ${steps} ступ.`,'scheme-label');
+    s += svgText(110,145,`угол ${fmt(p.angle,1)}°`,'scheme-warn');
+    s += svgText(165,198,`ступень: ${fmt(p.rise,2)} м × ${fmt(p.run,2)} м`,'scheme-small');
+    return schemeBox('Лестница — вид сбоку', `угол ${fmt(p.angle,1)}°`, wrapSvg('0 0 330 220', s));
+  }
+
   function generateQuote(r){
     const client = inputText('clientName','').trim() || 'клиент';
     const phone = inputText('clientPhone','').trim() || '—';
@@ -751,7 +916,7 @@
     const comment = inputText('clientComment','').trim() || '—';
     const lines = [];
     lines.push('КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ');
-    lines.push('Metal OS / Welding OS v0.6');
+    lines.push('Metal OS / Welding OS v0.8');
     lines.push('');
     lines.push(`Изделие: ${r.product}`);
     lines.push(`Клиент: ${client}`);
@@ -760,6 +925,8 @@
     lines.push('');
     lines.push('Размеры и параметры:');
     paramsRu(r).forEach(x=>lines.push('— ' + x));
+    lines.push('');
+    lines.push('Схема по размерам сформирована в приложении.');
     lines.push('');
     lines.push('Закупка металла по профилям:');
     r.purchase.lines.forEach(l=>lines.push(`— ${l.profile}: нужно ${m(l.lengthWithWaste)}, купить ${l.sticks} хлыст. по 6 м, остаток ${m(l.leftoverMeters)}, вес ${kg(l.weight)}, закупка ${money(l.purchaseCost)}. Входит: ${l.labels.join(', ')}`));
