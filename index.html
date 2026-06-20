@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Metal OS / Welding OS v0.10</title>
+  <title>Metal OS / Welding OS v0.14.1</title>
   <style>
     :root{
       --bg:#f2f0ea;--card:#ffffff;--card2:#f8f6f1;--text:#171717;--muted:#68635b;--line:#ddd6c8;
@@ -22,6 +22,8 @@
     .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;margin:12px 0;box-shadow:var(--shadow)}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .grid2-always{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .markup-row{display:grid;grid-template-columns:1fr 84px;gap:6px}
+    .markup-row select{padding:12px 4px;font-size:14px;text-align:center}
     label{display:block;font-size:13px;font-weight:700;margin:10px 0 6px;color:#333}
     input,select,textarea,button{width:100%;max-width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 13px;font-size:16px;background:#fff;color:var(--text);font-family:inherit}
     textarea{min-height:76px;resize:vertical}.btn{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:800;cursor:pointer;transition:opacity .15s}.btn:active{opacity:.8}.btn.secondary{background:#fff;color:var(--text);border-color:var(--line)}.btn.warn{background:#7b2d2d;color:#fff}
@@ -35,6 +37,13 @@
     .time-table{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0}
     .time-table tr{border-bottom:1px solid var(--line)}.time-table tr:last-child{border-bottom:none}
     .time-table td{padding:8px 4px}.time-table td:last-child{text-align:right;font-weight:700;white-space:nowrap;color:#333;padding-left:12px}
+    .time-input-cell{display:flex;align-items:center;justify-content:flex-end;gap:5px}
+    .time-input{width:62px;text-align:right;padding:7px 8px;font-size:15px;border-radius:10px}
+    .time-unit{color:var(--muted);font-size:13px;font-weight:600}
+    .time-manual{display:inline-block;font-size:10px;font-weight:700;color:#7a4a00;background:#fff0d8;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}
+    .time-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px;background:#f9f7f0;border-left:4px solid #111;border-radius:12px;padding:10px 12px}
+    .note-inline{font-size:13px;color:#333;line-height:1.4}
+    .time-reset-btn{width:auto;padding:8px 14px;font-size:13px;flex-shrink:0}
     .risk{border-radius:13px;padding:10px 12px;margin:8px 0;font-size:14px;line-height:1.35}.risk.high{background:#fff0f0;border-left:4px solid var(--bad)}.risk.mid{background:#fff6e8;border-left:4px solid var(--warn)}.risk.low{background:#edf8f0;border-left:4px solid var(--ok)}.risk.info{background:#edf3ff;border-left:4px solid var(--info)}
     .validation{display:none;border:1px solid #f0c4c4;background:#fff3f3;border-radius:15px;padding:12px;margin:10px 0;color:#7b1b1b}.validation ul{margin:8px 0 0;padding-left:18px}.validation li{margin:5px 0}.note{background:#f9f7f0;border-left:4px solid #111;border-radius:12px;padding:10px 12px;font-size:13px;color:#333;line-height:1.4}.quote{white-space:pre-wrap;background:#111;color:#f0f0f0;border-radius:16px;padding:14px;font-family:"Courier New",monospace;font-size:13px;line-height:1.5;max-height:420px;overflow:auto}.copy-msg{display:none;font-size:13px;color:var(--ok);margin-top:8px}.footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.5;margin:18px 0 6px}.hidden{display:none!important}
     details{border:1px solid var(--line);border-radius:16px;background:#fff;margin:10px 0;overflow:hidden}
@@ -44,6 +53,23 @@
     details summary::-webkit-details-marker{display:none}
     .details-body{padding:0 15px 15px}
     .muted{color:var(--muted)}
+    .help-block{background:var(--card2);border-color:var(--line);margin-bottom:14px}
+    .help-block summary{font-size:14px}
+    .help-list{margin:0 0 10px;padding-left:20px;display:grid;gap:7px;font-size:14px;line-height:1.4}
+    .help-list li::marker{color:var(--accent);font-weight:800}
+    .role-card{border:1px solid var(--line);border-radius:15px;background:var(--card2);padding:12px;margin:0 0 10px}
+    .role-card:last-child{margin-bottom:0}
+    .role-head{display:flex;align-items:center;gap:9px;cursor:pointer}
+    .role-head input[type=checkbox]{width:20px;height:20px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+    .role-name{font-weight:800;font-size:15px}
+    .role-hint{margin:4px 0 0 29px}
+    .role-body{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+    .cost-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+    .cost-row:last-child{border-bottom:none}
+    .cost-row b{font-weight:700;white-space:nowrap}
+    .cost-row.total{font-weight:800;font-size:15px;padding-top:10px}
+    .cost-breakdown{margin-top:14px;padding-top:4px;border-top:1px solid var(--line)}
+    .cost-breakdown .cost-row small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
     /* ── Схемы SVG ── */
     .scheme-wrap{display:grid;gap:12px}
     .scheme-box{border:1px solid var(--line);border-radius:15px;background:#fff;overflow:hidden}
@@ -52,14 +78,22 @@
     .scheme-title span{font-size:12px;color:var(--muted)}
     .scheme-svg{display:block;width:100%;height:auto;padding:8px 4px}
     /* Элементы внутри SVG */
-    .scheme-element{stroke:#111;stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
-    .scheme-thin{stroke:#888;stroke-width:1;fill:none;stroke-dasharray:none}
-    .scheme-dim{stroke:#aaa;stroke-width:1;fill:none;stroke-dasharray:4 3}
-    .scheme-post{stroke:#111;stroke-width:2;fill:#fff}
-    .scheme-fill{fill:#c8dff0;stroke:#6aa0c8;stroke-width:1}
-    .scheme-label{font-size:11px;fill:#111;font-weight:700;font-family:inherit}
-    .scheme-small{font-size:10px;fill:#555;font-family:inherit}
-    .scheme-warn{font-size:10px;fill:#9a3a00;font-weight:700;font-family:inherit}
+    .scheme-element{stroke:#16212b;stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+    .scheme-thin{stroke:#8a8478;stroke-width:1;fill:none;stroke-dasharray:none}
+    .scheme-dim{stroke:#5b7fa6;stroke-width:1;fill:none;stroke-dasharray:4 3}
+    .scheme-post{stroke:#16212b;stroke-width:2;fill:#e8b34a}
+    .scheme-rail{stroke:#a8632f;stroke-width:2.5;fill:none;stroke-linecap:round}
+    .scheme-wall{stroke:#a98f74;stroke-width:1;fill:none}
+    .scheme-fill{fill:#cfe8f7;stroke:#6aa0c8;stroke-width:1}
+    .scheme-fill-prof{fill:#d7e6c9;stroke:#7fa363;stroke-width:1}
+    .scheme-fill-tile{fill:#ecc4a8;stroke:#bf7e54;stroke-width:1}
+    .scheme-step-metal{fill:#cfd8e0;stroke:#8a9aa8;stroke-width:1}
+    .scheme-step-wood{fill:#e6cd9e;stroke:#ad8a51;stroke-width:1}
+    .scheme-step-concrete{fill:#d9d8d3;stroke:#a6a49c;stroke-width:1}
+    .scheme-label{font-size:11px;fill:#16212b;font-weight:700;font-family:inherit;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+    .scheme-small{font-size:10px;fill:#5a564c;font-family:inherit;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+    .scheme-dimtext{font-size:10px;fill:#345f86;font-weight:700;font-family:inherit;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+    .scheme-warn{font-size:10px;fill:#a3460a;font-weight:700;font-family:inherit;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
     polyline.scheme-element{fill:none}
     @media(max-width:560px){body{padding-left:8px;padding-right:8px}.grid3{grid-template-columns:1fr}.type-grid,.preset-grid{grid-template-columns:1fr}.card{padding:13px}.price-hero strong{font-size:26px}}
     @media(max-width:480px){.grid2{grid-template-columns:1fr}}
@@ -71,10 +105,26 @@
 <header>
   <div class="head-inner">
     <h1>Metal OS / Welding OS</h1>
-    <div class="sub">v0.10 · расчёт + автосхема: навесы, перила, лестницы</div>
+    <div class="sub">v0.14.1 · расчёт + автосхема: навесы, перила, лестницы</div>
   </div>
 </header>
 <div class="app">
+  <details id="helpDetails" class="help-block">
+    <summary>Как пользоваться · коротко</summary>
+    <div class="details-body">
+      <ol class="help-list">
+        <li>Выберите <b>тип изделия</b> и пресет (эконом / стандарт / усиленный).</li>
+        <li>Заполните <b>заказ</b> (необязательно) и <b>размеры</b> — это единственный обязательный шаг.</li>
+        <li>Проверьте <b>профили</b> и при необходимости <b>цены</b> (можно за хлыст, метр, кг или тонну — приложение само пересчитает).</li>
+        <li>Нажмите <b>«Рассчитать»</b> внизу экрана — получите металл, хлысты, вес, время и предварительную цену.</li>
+        <li>Часы по операциям можно <b>поправить вручную</b> — изменённое значение учтётся в цене и сроке.</li>
+        <li>Откройте <b>схему</b>, проверьте <b>риски</b>, затем нажмите <b>«КП»</b> — текст можно скопировать и отправить клиенту.</li>
+      </ol>
+      <p class="mini">Для перил угол наклона задаётся отдельным полем и работает для любого типа перил. Наценки можно задать в процентах или фиксированной суммой — переключатель рядом с полем.</p>
+      <p class="mini">Расчёт предварительный и не заменяет инженерное заключение для ответственных конструкций.</p>
+    </div>
+  </details>
+
   <section class="card">
     <h2>1. Тип изделия</h2>
     <div class="type-grid" id="productChoices">
@@ -126,23 +176,43 @@
     </div>
   </details>
 
+  <details id="rolesDetails">
+    <summary>6. Работа, роли, оплата</summary>
+    <div class="details-body">
+    <p class="mini">По умолчанию включён только сварщик — это как «одна ставка» раньше. Включайте остальные роли галочкой, если нужно посчитать их отдельно.</p>
+    <div id="rolesContainer"></div>
+    <button type="button" class="btn secondary" id="resetRoleHoursBtn" style="margin-top:4px">Сбросить часы ролей к авто</button>
+    </div>
+  </details>
+
   <details id="workDetails">
-    <summary>6. Работа, наценки, расходники</summary>
+    <summary>7. Наценки, расходники</summary>
     <div class="details-body">
     <div class="grid2">
-      <div><label for="workers">Рабочих</label><input id="workers" type="text" inputmode="numeric" min="1" step="1" value="2"></div>
-      <div><label for="hourRate">Ставка, ₽/час</label><input id="hourRate" type="text" inputmode="decimal" min="0" step="50" value="1200"></div>
-      <div><label for="materialMarkup">Наценка материалы, %</label><input id="materialMarkup" type="text" inputmode="decimal" min="0" step="1" value="30"></div>
-      <div><label for="laborMarkup">Маржа работа, %</label><input id="laborMarkup" type="text" inputmode="decimal" min="0" step="1" value="20"></div>
+      <div>
+        <label for="materialMarkupValue">Наценка материалы</label>
+        <div class="markup-row">
+          <input id="materialMarkupValue" type="text" inputmode="decimal" min="0" step="1" value="30">
+          <select id="materialMarkupType"><option value="percent">%</option><option value="fixed">₽ фикс</option></select>
+        </div>
+      </div>
+      <div>
+        <label for="laborMarkupValue">Наценка работа</label>
+        <div class="markup-row">
+          <input id="laborMarkupValue" type="text" inputmode="decimal" min="0" step="1" value="20">
+          <select id="laborMarkupType"><option value="percent">%</option><option value="fixed">₽ фикс</option></select>
+        </div>
+      </div>
       <div><label for="consumablesFixed">Расходники фикс, ₽</label><input id="consumablesFixed" type="text" inputmode="decimal" min="0" step="100" value="1500"></div>
       <div><label for="consumablesRate">Расходники переменные</label><input id="consumablesRate" type="text" inputmode="decimal" min="0" step="10" value="120"></div>
     </div>
     <p id="consumablesHint" class="mini" style="margin-top:8px">Для навеса переменные расходники считаются за м².</p>
+    <p class="mini">«₽ фикс» — это фиксированная сумма наценки на весь заказ, а не за единицу.</p>
     </div>
   </details>
 
   <section class="card" id="resultsCard">
-    <h2>7. Результат</h2>
+    <h2>8. Результат</h2>
     <div class="price-hero"><small>Предварительная цена клиенту</small><strong id="clientPrice">—</strong></div>
     <div class="metrics">
       <div class="metric"><small>Металл нужен</small><strong id="totalNeeded">—</strong></div>
@@ -152,32 +222,33 @@
       <div class="metric"><small>Часы</small><strong id="totalHours">—</strong></div>
       <div class="metric"><small>Срок</small><strong id="totalDays">—</strong></div>
     </div>
+    <div id="costBreakdown" class="cost-breakdown"></div>
   </section>
 
   <section class="card" id="schemeCard">
-    <h2>8. Схема по размерам</h2>
+    <h2>9. Схема по размерам</h2>
     <p class="mini">Схема строится автоматически по введённым размерам. Это предварительная схема для понимания конструкции и согласования с клиентом, не инженерный чертёж.</p>
     <div id="schemeContainer" class="scheme-wrap"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="specCard">
-    <h2>9. Закупка по профилям</h2>
+    <h2>10. Закупка по профилям</h2>
     <div id="purchaseList" class="section-list"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="timeCard">
-    <h2>10. Время по операциям</h2>
+    <h2>11. Время по операциям</h2>
     <div id="timeList" class="section-list"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="risksCard">
-    <h2>11. Риски и рекомендации</h2>
+    <h2>12. Риски и рекомендации</h2>
     <div class="note">Предварительная проверка рисков. Не является инженерным заключением. Для ответственных конструкций нужен расчёт специалиста.</div>
     <div id="riskList"><p class="mini">Нажмите «Рассчитать».</p></div>
   </section>
 
   <section class="card" id="quoteCard">
-    <h2>12. КП для клиента</h2>
+    <h2>13. КП для клиента</h2>
     <div id="quoteText" class="quote">Нажмите «Рассчитать», затем скопируйте КП.</div>
     <div class="top-actions no-print">
       <button class="btn" type="button" id="copyQuoteBtn">Скопировать КП</button>
@@ -188,7 +259,7 @@
 
   <div class="footer">
     Metal OS / Welding OS<br>
-    Версия: v0.10 · Статус: test MVP<br>
+    Версия: v0.14.1 · Статус: test MVP<br>
     Дата сборки: 2026-06-18<br>
     Расчёт предварительный и не заменяет инженерное заключение.
   </div>
@@ -206,7 +277,7 @@
   'use strict';
 
   const BUILD_DATE = '2026-06-18';
-  const STORAGE_KEY = 'metal_os_v10_settings';
+  const STORAGE_KEY = 'metal_os_v14_settings';
   const STICK_LENGTH = 6;
 
   const PROFILE_CATALOG = [
@@ -237,10 +308,23 @@
     }
   };
 
+  const ROLE_DEFS = [
+    { key:'welder', label:'Сварщик', defaultEnabled:true, defaultRate:1200, defaultPeople:2,
+      ownOps:[], hint:'Сварка, резка, сборка, замер, подготовка, закупка, зачистка — и всё, что не взяли другие включённые роли.' },
+    { key:'painter', label:'Маляр', defaultEnabled:false, defaultRate:1200, defaultPeople:1,
+      ownOps:['Покраска / грунтовка'], hint:'Покраска и грунтовка. Если выключено — эти часы считает сварщик.' },
+    { key:'mounter', label:'Установщик / монтажник', defaultEnabled:false, defaultRate:1200, defaultPeople:1,
+      ownOps:['Монтаж'], hint:'Монтаж на объекте. Если выключено — эти часы считает сварщик.' },
+    { key:'helper', label:'Разнорабочий / помощник', defaultEnabled:false, defaultRate:900, defaultPeople:1,
+      ownOps:[], hint:'Автоматических часов нет — впишите вручную, если помощник нужен.' }
+  ];
+
   let state = {
     product:'naves',
     preset:'standard',
     prices:{},
+    timeOverrides:{},
+    roleHoursOverrides:{},
     lastResult:null
   };
 
@@ -309,6 +393,144 @@
   }
   function m(n){ return fmt(n,1) + ' м'; }
   function kg(n){ return fmt(n,1) + ' кг'; }
+  function hasTimeOverrides(){ return Object.keys(state.timeOverrides).length > 0; }
+  function attachTimeInputs(){
+    document.querySelectorAll('.time-input').forEach(el=>{
+      el.addEventListener('input', ()=>{
+        const before = el.value;
+        const after = sanitizeNumericChars(before, false);
+        if(after !== before) el.value = after;
+      });
+      el.addEventListener('change', ()=>{
+        const label = el.getAttribute('data-time-label');
+        const val = parseNumber(el.value, NaN);
+        if(Number.isFinite(val) && val >= 0){ state.timeOverrides[label] = val; }
+        calculate();
+      });
+    });
+    const resetBtn = document.getElementById('resetTimeBtn');
+    if(resetBtn) resetBtn.addEventListener('click', ()=>{ state.timeOverrides = {}; calculate(); });
+  }
+
+  // ── Роли, оплата ──────────────────────────────────────────────────────
+  function renderRolesSection(){
+    const wrap = $('rolesContainer');
+    if(!wrap) return;
+    wrap.innerHTML = ROLE_DEFS.map(def => `
+      <div class="role-card">
+        <label class="role-head">
+          <input type="checkbox" id="role_${def.key}_enabled" ${def.defaultEnabled ? 'checked' : ''}>
+          <span class="role-name">${def.label}</span>
+        </label>
+        <p class="mini role-hint">${def.hint}</p>
+        <div class="role-body" id="roleBody_${def.key}">
+          <div class="grid2-always">
+            <div><label>Оплата</label>
+              <select id="role_${def.key}_paymentType">
+                <option value="hour">За час</option>
+                <option value="day">За день</option>
+                <option value="order">За заказ</option>
+              </select>
+            </div>
+            <div id="roleRateWrap_${def.key}"><label id="roleRateLabel_${def.key}">Ставка, ₽/час</label><input id="role_${def.key}_rate" type="text" inputmode="decimal" min="0" step="50" value="${def.defaultRate}"></div>
+            <div id="rolePeopleWrap_${def.key}"><label>Людей</label><input id="role_${def.key}_people" type="text" inputmode="numeric" min="1" step="1" value="${def.defaultPeople}"></div>
+            <div id="roleHoursWrap_${def.key}"><label>Часы</label><input id="role_${def.key}_hours" type="text" inputmode="decimal" min="0" step="0.5" value="0"></div>
+            <div id="roleDaysWrap_${def.key}" class="hidden"><label>Дней</label><input id="role_${def.key}_days" type="text" inputmode="numeric" min="1" step="1" value="1"></div>
+            <div id="roleSumWrap_${def.key}" class="hidden"><label>Сумма, ₽</label><input id="role_${def.key}_sum" type="text" inputmode="decimal" min="0" step="500" value="0"></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    attachNumericSanitizers();
+    ROLE_DEFS.forEach(def => { attachRoleHandlers(def.key); updateRoleVisibility(def.key); });
+    const resetBtn = $('resetRoleHoursBtn');
+    if(resetBtn && !resetBtn.dataset.bound){
+      resetBtn.dataset.bound = '1';
+      resetBtn.addEventListener('click', ()=>{ state.roleHoursOverrides = {}; if(state.lastResult) calculate(); });
+    }
+  }
+  function updateRoleVisibility(key){
+    const enabledEl = $('role_'+key+'_enabled');
+    const body = $('roleBody_'+key);
+    if(!enabledEl || !body) return;
+    body.style.display = enabledEl.checked ? '' : 'none';
+    if(!enabledEl.checked) return;
+    const pt = selectValue('role_'+key+'_paymentType','hour');
+    $('roleRateWrap_'+key).classList.toggle('hidden', pt==='order');
+    $('roleHoursWrap_'+key).classList.toggle('hidden', pt!=='hour');
+    $('roleDaysWrap_'+key).classList.toggle('hidden', pt!=='day');
+    $('roleSumWrap_'+key).classList.toggle('hidden', pt!=='order');
+    const rateLabel = $('roleRateLabel_'+key);
+    if(rateLabel) rateLabel.textContent = pt==='day' ? 'Ставка, ₽/день' : 'Ставка, ₽/час';
+  }
+  function attachRoleHandlers(key){
+    const enabledEl = $('role_'+key+'_enabled');
+    const ptEl = $('role_'+key+'_paymentType');
+    const hoursEl = $('role_'+key+'_hours');
+    if(!enabledEl || enabledEl.dataset.bound) return;
+    enabledEl.dataset.bound = '1';
+    enabledEl.addEventListener('change', ()=>{ updateRoleVisibility(key); if(state.lastResult) calculate(); });
+    ptEl.addEventListener('change', ()=>{ updateRoleVisibility(key); if(state.lastResult) calculate(); });
+    hoursEl.addEventListener('change', ()=>{
+      const val = parseNumber(hoursEl.value, NaN);
+      if(Number.isFinite(val) && val >= 0) state.roleHoursOverrides[key] = val;
+      if(state.lastResult) calculate();
+    });
+    ['role_'+key+'_rate','role_'+key+'_people','role_'+key+'_days','role_'+key+'_sum'].forEach(id=>{
+      const el = $(id);
+      if(el) el.addEventListener('change', ()=>{ if(state.lastResult) calculate(); });
+    });
+  }
+  function readRolesConfig(){
+    const cfg = {};
+    ROLE_DEFS.forEach(def=>{
+      const enabledEl = $('role_'+def.key+'_enabled');
+      cfg[def.key] = {
+        key: def.key,
+        label: def.label,
+        enabled: enabledEl ? enabledEl.checked : def.defaultEnabled,
+        paymentType: selectValue('role_'+def.key+'_paymentType','hour'),
+        rate: Math.max(0, inputNumber('role_'+def.key+'_rate', def.defaultRate)),
+        people: Math.max(1, Math.round(inputNumber('role_'+def.key+'_people', def.defaultPeople))),
+        days: Math.max(1, Math.round(inputNumber('role_'+def.key+'_days', 1))),
+        sum: Math.max(0, inputNumber('role_'+def.key+'_sum', 0))
+      };
+    });
+    return cfg;
+  }
+  function computeRoleAutoHours(time, rolesCfg){
+    const claimed = new Set();
+    const totalPersonHours = { welder:0, painter:0, mounter:0, helper:0 };
+    ROLE_DEFS.forEach(def=>{
+      if(def.key==='welder' || !def.ownOps.length) return;
+      if(rolesCfg[def.key] && rolesCfg[def.key].enabled){
+        time.forEach(t=>{ if(def.ownOps.includes(t.label)){ totalPersonHours[def.key]+=t.hours; claimed.add(t.label); } });
+      }
+    });
+    time.forEach(t=>{ if(!claimed.has(t.label)) totalPersonHours.welder += t.hours; });
+    // Таблица времени даёт суммарные человеко-часы операции. «Часы» роли в формуле —
+    // это часы НА ОДНОГО человека (как в люди×ставка×часы), поэтому делим на людей роли.
+    const perPerson = {};
+    ROLE_DEFS.forEach(def=>{
+      const people = (rolesCfg[def.key] && rolesCfg[def.key].people) || 1;
+      perPerson[def.key] = totalPersonHours[def.key] / Math.max(1, people);
+    });
+    return perPerson;
+  }
+  function roleEffectiveHours(key, autoHours){
+    const ov = state.roleHoursOverrides[key];
+    return (ov !== undefined && Number.isFinite(ov)) ? ov : (autoHours[key] || 0);
+  }
+  function refreshRoleAutoHours(r){
+    const autoH = computeRoleAutoHours(r.time, readRolesConfig());
+    ROLE_DEFS.forEach(def=>{
+      const el = $('role_'+def.key+'_hours');
+      if(!el) return;
+      if(state.roleHoursOverrides[def.key] === undefined){
+        el.value = fmt(autoH[def.key] || 0, 1);
+      }
+    });
+  }
   function profile(name){ return PROFILE_CATALOG.find(p=>p.name===name) || PROFILE_CATALOG[0]; }
   function priceSettings(name){
     if(!state.prices[name]){
@@ -339,15 +561,39 @@
     return false;
   }
 
+  function defaultRolesData(){
+    const roles = {};
+    ROLE_DEFS.forEach(def=>{ roles[def.key] = { enabled:def.defaultEnabled, paymentType:'hour', rate:def.defaultRate, people:def.defaultPeople, days:1, sum:0 }; });
+    return roles;
+  }
+  function applyRolesData(roles){
+    ROLE_DEFS.forEach(def=>{
+      const r = (roles && roles[def.key]) || {};
+      const d = { enabled:def.defaultEnabled, paymentType:'hour', rate:def.defaultRate, people:def.defaultPeople, days:1, sum:0 };
+      const enabledEl = $('role_'+def.key+'_enabled');
+      if(enabledEl) enabledEl.checked = (r.enabled !== undefined) ? r.enabled : d.enabled;
+      setValue('role_'+def.key+'_paymentType', r.paymentType ?? d.paymentType);
+      setValue('role_'+def.key+'_rate', r.rate ?? d.rate);
+      setValue('role_'+def.key+'_people', r.people ?? d.people);
+      setValue('role_'+def.key+'_days', r.days ?? d.days);
+      setValue('role_'+def.key+'_sum', r.sum ?? d.sum);
+      updateRoleVisibility(def.key);
+    });
+  }
+  function readRolesData(){
+    const cfg = readRolesConfig();
+    const out = {};
+    ROLE_DEFS.forEach(def=>{ const c=cfg[def.key]; out[def.key] = { enabled:c.enabled, paymentType:c.paymentType, rate:c.rate, people:c.people, days:c.days, sum:c.sum }; });
+    return out;
+  }
   function defaultSettings(){
     const prices = {};
     PROFILE_CATALOG.forEach(p=> prices[p.name] = { type:p.defaultType, value:p.defaultValue });
     return {
       prices,
-      workers:2,
-      hourRate:1200,
-      materialMarkup:30,
-      laborMarkup:20,
+      roles: defaultRolesData(),
+      materialMarkupType:'percent', materialMarkupValue:30,
+      laborMarkupType:'percent', laborMarkupValue:20,
       consumablesFixed:1500,
       consumablesRate:120
     };
@@ -358,10 +604,11 @@
     try { saved = JSON.parse(storageGet(STORAGE_KEY) || '{}') || {}; } catch(e){ saved = {}; }
     state.prices = Object.assign({}, defaults.prices, saved.prices || {});
     PROFILE_CATALOG.forEach(p=>{ if(!state.prices[p.name]) state.prices[p.name] = {type:p.defaultType,value:p.defaultValue}; });
-    ['workers','hourRate','materialMarkup','laborMarkup','consumablesFixed','consumablesRate'].forEach(k=>{
-      const value = saved[k] ?? defaults[k];
-      setTimeout(()=>setValue(k, value), 0);
+    renderPrices();
+    ['materialMarkupType','materialMarkupValue','laborMarkupType','laborMarkupValue','consumablesFixed','consumablesRate'].forEach(k=>{
+      setValue(k, saved[k] ?? defaults[k]);
     });
+    applyRolesData(saved.roles || defaults.roles);
   }
   function readPriceCards(){
     PROFILE_CATALOG.forEach(p=>{
@@ -376,10 +623,11 @@
     readPriceCards();
     const data = {
       prices: state.prices,
-      workers: Math.max(1, Math.round(inputNumber('workers', 2))),
-      hourRate: Math.max(0, inputNumber('hourRate', 1200)),
-      materialMarkup: Math.max(0, inputNumber('materialMarkup', 30)),
-      laborMarkup: Math.max(0, inputNumber('laborMarkup', 20)),
+      roles: readRolesData(),
+      materialMarkupType: selectValue('materialMarkupType','percent'),
+      materialMarkupValue: Math.max(0, inputNumber('materialMarkupValue', 30)),
+      laborMarkupType: selectValue('laborMarkupType','percent'),
+      laborMarkupValue: Math.max(0, inputNumber('laborMarkupValue', 20)),
       consumablesFixed: Math.max(0, inputNumber('consumablesFixed', 1500)),
       consumablesRate: Math.max(0, inputNumber('consumablesRate', 120))
     };
@@ -391,7 +639,9 @@
     state.prices = defaults.prices;
     storageSet(STORAGE_KEY, JSON.stringify(defaults));
     renderPrices();
-    ['workers','hourRate','materialMarkup','laborMarkup','consumablesFixed','consumablesRate'].forEach(k=>setValue(k, defaults[k]));
+    ['materialMarkupType','materialMarkupValue','laborMarkupType','laborMarkupValue','consumablesFixed','consumablesRate'].forEach(k=>setValue(k, defaults[k]));
+    applyRolesData(defaults.roles);
+    state.roleHoursOverrides = {};
     showMsg('settingsMsg', 'Настройки сброшены.');
   }
   function showMsg(id, text){ const el=$(id); if(el){ el.textContent=text; el.style.display='block'; setTimeout(()=>{el.style.display='none';}, 2500); } }
@@ -453,11 +703,13 @@
       </div>`;
     } else if(state.product === 'perila'){
       c.innerHTML = `<div class="grid2-always">
-        <div><label>Длина перил, м</label><input id="length" type="text" inputmode="decimal" min="0" step="0.1" value="5"></div>
+        <div><label>Горизонтальная длина / проекция, м</label><input id="length" type="text" inputmode="decimal" min="0" step="0.1" value="5"></div>
         <div><label>Высота перил, м</label><input id="height" type="text" inputmode="decimal" min="0" step="0.05" value="1"></div>
         <div><label>Шаг стоек, м</label><input id="postStep" type="text" inputmode="decimal" min="0.3" step="0.05" value="1"></div>
+        <div><label>Угол перил, °</label><input id="railingAngle" type="text" inputmode="decimal" min="0" max="60" step="1" value="0"></div>
         <div><label>Запас на резку, %</label><input id="waste" type="text" inputmode="decimal" min="0" step="1" value="8"></div>
         <div><label>Тип перил</label><select id="railingType"><option value="straight">Прямые</option><option value="stair">Лестничные</option><option value="outdoor">Уличные</option><option value="balcony">Балконные</option></select></div>
+        <p class="mini" style="grid-column:1/-1;margin:-4px 0 4px">Длина — это горизонтальное расстояние (проекция), а не длина вдоль наклона. При угле больше 0° поручень и направляющие будут длиннее заданной длины — приложение пересчитает их само. При выборе «Лестничные» угол подставится автоматически (30°), но его можно изменить.</p>
         <div><label>Заполнение</label><select id="fillType"><option value="vertical">Вертикальное</option><option value="horizontal">Горизонтальное</option><option value="none">Без заполнения</option></select></div>
         <div><label>Шаг заполнения, м</label><input id="fillStep" type="text" inputmode="decimal" min="0.05" step="0.01" value="0.15"></div>
         <div><label>Горизонтальных рядов</label><input id="horizontalRows" type="text" inputmode="numeric" min="1" step="1" value="3"></div>
@@ -494,6 +746,8 @@
   }
   function setProduct(productName){
     state.product = productName;
+    state.timeOverrides = {};
+    state.roleHoursOverrides = {};
     document.querySelectorAll('[data-product]').forEach(btn=>btn.classList.toggle('active', btn.dataset.product===productName));
     renderParams();
     renderProfiles();
@@ -501,7 +755,28 @@
     applyPreset(state.preset);
     clearValidation();
     attachNumericSanitizers();
+    attachRailingTypeHandler();
     if(state.lastResult) setTimeout(calculate, 0);
+  }
+  function attachRailingTypeHandler(){
+    const sel = $('railingType');
+    const angleEl = $('railingAngle');
+    if(sel && !sel.dataset.angleBound){
+      sel.dataset.angleBound = '1';
+      sel.addEventListener('change', ()=>{
+        const el = $('railingAngle');
+        if(!el) return;
+        const current = parseNumber(el.value, 0);
+        if(sel.value === 'stair' && current === 0){
+          el.value = '30';
+        }
+        if(state.lastResult) calculate();
+      });
+    }
+    if(angleEl && !angleEl.dataset.recalcBound){
+      angleEl.dataset.recalcBound = '1';
+      angleEl.addEventListener('change', ()=>{ if(state.lastResult) calculate(); });
+    }
   }
   function setPreset(presetName){
     state.preset = presetName;
@@ -562,13 +837,17 @@
   }
   function workSettings(){
     return {
-      workers: Math.max(1, Math.round(inputNumber('workers',2))),
-      hourRate: Math.max(0, inputNumber('hourRate',1200)),
-      materialMarkup: Math.max(0, inputNumber('materialMarkup',30)),
-      laborMarkup: Math.max(0, inputNumber('laborMarkup',20)),
+      materialMarkupType: selectValue('materialMarkupType','percent'),
+      materialMarkupValue: Math.max(0, inputNumber('materialMarkupValue',30)),
+      laborMarkupType: selectValue('laborMarkupType','percent'),
+      laborMarkupValue: Math.max(0, inputNumber('laborMarkupValue',20)),
       consumablesFixed: Math.max(0, inputNumber('consumablesFixed',1500)),
       consumablesRate: Math.max(0, inputNumber('consumablesRate',120))
     };
+  }
+  function applyMarkup(base, type, value){
+    if(type === 'fixed') return base + Math.max(0, value);
+    return base * (1 + Math.max(0, value)/100);
   }
   function makeTime(rawLen, basis, productSpecific){
     const paint = productSpecific.paint;
@@ -584,17 +863,36 @@
     ];
     if(paint) time.push({ label:'Покраска / грунтовка', hours:productSpecific.paintHours });
     if(mount) time.push({ label:'Монтаж', hours:productSpecific.mountHours });
-    return time.map(x=>({ label:x.label, hours:Number.isFinite(x.hours)?x.hours:0 }));
+    return time.map(x=>{
+      const auto = Number.isFinite(x.hours) ? x.hours : 0;
+      const ov = state.timeOverrides[x.label];
+      const overridden = ov !== undefined && ov !== null && Number.isFinite(ov);
+      return { label:x.label, hours: overridden ? ov : auto, autoHours: auto, overridden };
+    });
   }
   function getProductValidationBase(){
     const errors = [], warnings = [];
-    const ws = workSettings();
-    if(ws.hourRate <= 0) warnings.push('Ставка рабочего равна 0 — работа не будет учтена в цене.');
+    const rolesCfg = readRolesConfig();
+    const enabledRoles = ROLE_DEFS.filter(d=>rolesCfg[d.key] && rolesCfg[d.key].enabled);
+    if(!enabledRoles.length) warnings.push('Ни одна роль не включена — работа не будет учтена в цене.');
+    enabledRoles.forEach(def=>{
+      const cfg = rolesCfg[def.key];
+      if(cfg.paymentType!=='order' && cfg.rate<=0) warnings.push(`Ставка роли «${def.label}» равна 0.`);
+      if(cfg.paymentType==='order' && cfg.sum<=0) warnings.push(`Сумма за заказ для роли «${def.label}» равна 0.`);
+    });
     PROFILE_CATALOG.forEach(p=>{
       const ps = priceSettings(p.name);
       if(parseNumber(ps.value,0) <= 0) warnings.push(`Цена профиля ${p.name} равна 0.`);
     });
     return {errors,warnings};
+  }
+  function checkSanity(v, value, max, label, unit){
+    if(value <= max) return;
+    if(unit === false){
+      v.warnings.push(`${label}: ${fmt(value,0)} — необычно большое значение. Проверьте, не ошиблись ли вы в количестве.`);
+    } else {
+      v.warnings.push(`${label}: ${fmt(value,2)} м — необычно большое значение. Проверьте единицы: возможно, введены сантиметры вместо метров. Например, 700 см = 7 м.`);
+    }
   }
 
   function calculateNaves(){
@@ -618,6 +916,11 @@
     if(posts<2){ v.warnings.push('Количество стоек было меньше 2 — для расчёта принято 2.'); posts=2; }
     if(crossStep<0.3){ v.warnings.push('Шаг поперечин был меньше 0.3 м — для расчёта принято 0.3 м.'); crossStep=0.3; }
     if(waste<0){ v.warnings.push('Запас на резку был отрицательный — для расчёта принято 0%.'); waste=0; }
+    checkSanity(v, width, 15, 'Ширина навеса');
+    checkSanity(v, depth, 8, 'Вылет навеса');
+    checkSanity(v, height, 6, 'Высота у края');
+    checkSanity(v, height2, 6, 'Высота у стены');
+    checkSanity(v, posts, 40, 'Количество стоек', false);
     if(v.errors.length) return { validation:v };
 
     const area = width*depth;
@@ -695,7 +998,7 @@
     if(wallSide !== 'none') risks.push({level:'info', text:`Примыкание к стене (${wallSideLabel(wallSide)}): проверить материал стены, анкеровку пристенного прогона, герметизацию примыкания.`});
 
     return finalizeResult({ product:'Навес', validation:v,
-      params:{ width, depth, height, height2, posts, frontPostCount, backPostCount, crossStep, waste, roofAngleDeg, rafterLen, coverName:coverNames[coverType], coverArea, coverPrice, paint, mount, wallSide },
+      params:{ width, depth, height, height2, posts, frontPostCount, backPostCount, crossStep, waste, roofAngleDeg, rafterLen, coverType, coverName:coverNames[coverType], coverArea, coverPrice, paint, mount, wallSide },
       groups, purchase, additionalMaterials:[{label:`Покрытие (${coverNames[coverType]})`, cost:coverCost, qty:`${fmt(coverArea,1)} м² по скату`}],
       time, risks, rawLen, basisValue:area, basisLabel:'м²' });
   }
@@ -703,23 +1006,33 @@
   function calculatePerila(){
     const v = getProductValidationBase();
     let length=inputNumber('length',0), height=inputNumber('height',0), postStep=inputNumber('postStep',1), waste=inputNumber('waste',8), fillStep=inputNumber('fillStep',0.15), rows=Math.round(inputNumber('horizontalRows',3));
-    if(length<=0) v.errors.push('Длина перил должна быть больше 0.');
+    let railingAngle=inputNumber('railingAngle',0);
+    if(length<=0) v.errors.push('Горизонтальная длина перил должна быть больше 0.');
     if(height<=0) v.errors.push('Высота перил должна быть больше 0.');
     if(postStep<0.3){ v.warnings.push('Шаг стоек был меньше 0.3 м — для расчёта принято 0.3 м.'); postStep=0.3; }
     if(fillStep<0.05){ v.warnings.push('Шаг заполнения был меньше 0.05 м — для расчёта принято 0.05 м.'); fillStep=0.05; }
     if(rows<1){ v.warnings.push('Количество горизонтальных рядов было меньше 1 — для расчёта принят 1 ряд.'); rows=1; }
     if(waste<0){ v.warnings.push('Запас на резку был отрицательный — для расчёта принято 0%.'); waste=0; }
+    if(railingAngle<0){ v.warnings.push('Угол перил был отрицательным — для расчёта принято 0°.'); railingAngle=0; }
+    if(railingAngle>60){ v.warnings.push('Угол перил больше 60° — для расчёта ограничено 60°.'); railingAngle=60; }
+    checkSanity(v, length, 50, 'Горизонтальная длина перил');
+    checkSanity(v, height, 3, 'Высота перил');
+    checkSanity(v, postStep, 5, 'Шаг стоек');
     if(v.errors.length) return { validation:v };
     const railingType=selectValue('railingType','straight'), fillType=selectValue('fillType','vertical'), mountType=selectValue('mountType','top');
     const paint=selectValue('paint','no')==='yes', mount=selectValue('mount','yes')==='yes';
     const postProfile=selectValue('profilePost','40x40x2'), handrailProfile=selectValue('profileHandrail','60x40x2'), fillProfile=selectValue('profileFill','40x20x2');
+    // При наклоне поручень и направляющие идут по гипотенузе: длина / cos(угол)
+    const angleRad = railingAngle * Math.PI / 180;
+    const slopeFactor = railingAngle > 0 ? 1 / Math.cos(angleRad) : 1;
+    const runLen = length * slopeFactor;  // наклонная длина пролёта
     const postsCount=Math.ceil(length/postStep)+1;
-    const postsLen=postsCount*height;
-    const handrailLen=length;
-    const bottomLen=fillType==='none' ? 0 : length;
+    const postsLen=postsCount*height;     // стойки всегда вертикальные
+    const handrailLen=runLen;             // поручень по наклону
+    const bottomLen=fillType==='none' ? 0 : runLen;
     let fillLen=0, fillInfo='без заполнения';
     if(fillType==='vertical') { const count=Math.ceil(length/fillStep); fillLen=count*height; fillInfo=`вертикальное, примерно ${count} элементов`; }
-    if(fillType==='horizontal') { fillLen=rows*length; fillInfo=`горизонтальное, ${rows} ряд.`; }
+    if(fillType==='horizontal') { fillLen=rows*runLen; fillInfo=`горизонтальное, ${rows} ряд.`; }
     const groups=[
       {label:'Стойки', profile:postProfile, length:postsLen},
       {label:'Поручень', profile:handrailProfile, length:handrailLen}
@@ -735,7 +1048,9 @@
     if(mountType==='wood') risks.push({level:'mid',text:'Крепление к дереву — слабое основание. Проверить основание и крепёж.'});
     if(railingType==='outdoor') risks.push({level:'mid',text:'Уличные перила: учесть коррозию, грунт, покраску и крепления.'});
     if(railingType==='stair') risks.push({level:'mid',text:'Лестничные перила: проверить угол, крепления и высоту поручня.'});
-    return finalizeResult({ product:'Перила', validation:v, params:{ length,height,postStep,waste,railingType:labelMap(railingType),fillInfo,mountType:labelMap(mountType),paint,mount }, groups, purchase, additionalMaterials:[], time, risks, rawLen, basisValue:length, basisLabel:'пог. м' });
+    if(railingAngle>45) risks.push({level:'high',text:`Большой угол перил (${fmt(railingAngle,0)}°). Очень крутой марш — проверьте удобство, высоту поручня по нормали и крепления.`});
+    else if(railingAngle>0 && railingAngle<20) risks.push({level:'info',text:`Небольшой угол перил (${fmt(railingAngle,0)}°). Проверьте, действительно ли перила наклонные — для прямых угол должен быть 0°.`});
+    return finalizeResult({ product:'Перила', validation:v, params:{ length,height,postStep,waste,railingAngle,railingType:labelMap(railingType),fillInfo,mountType:labelMap(mountType),paint,mount }, groups, purchase, additionalMaterials:[], time, risks, rawLen, basisValue:length, basisLabel:'пог. м' });
   }
 
   function calculateLestnica(){
@@ -745,9 +1060,13 @@
     if(projection<=0) v.errors.push('Длина проекции должна быть больше 0.');
     if(stairWidth<=0) v.errors.push('Ширина лестницы должна быть больше 0.');
     if(waste<0){ v.warnings.push('Запас на резку был отрицательный — для расчёта принято 0%.'); waste=0; }
+    checkSanity(v, totalHeight, 10, 'Высота подъёма');
+    checkSanity(v, projection, 30, 'Длина проекции');
+    checkSanity(v, stairWidth, 5, 'Ширина лестницы');
     if(v.errors.length) return { validation:v };
     if(steps<=0) steps=Math.round(totalHeight/0.17);
     if(steps<2){ v.warnings.push('Количество ступеней было меньше 2 — для расчёта принято 2.'); steps=2; }
+    checkSanity(v, steps, 150, 'Количество ступеней', false);
     const rise=totalHeight/steps, run=projection/steps, angle=Math.atan(totalHeight/projection)*(180/Math.PI);
     const stringerLen=Math.sqrt(totalHeight*totalHeight + projection*projection);
     const stringerProfile=selectValue('profileStringer','80x80x3'), stepFrameProfile=selectValue('profileStepFrame','60x40x2'), railingProfile=selectValue('profileRailing','40x40x2');
@@ -772,7 +1091,7 @@
     if(run<0.23) risks.push({level:'mid',text:'Глубина ступени меньше 23 см. Рекомендация: увеличить проступь.'});
     if(stairWidth>1.2 && profile(stringerProfile).rank<5) risks.push({level:'mid',text:'Слабый косоур при большой ширине. Усилить косоур или добавить опору.'});
     if(stairType==='outdoor') risks.push({level:'mid',text:'Уличная лестница: учесть противоскольжение, коррозию, уклон, воду и покрытие.'});
-    return finalizeResult({ product:'Лестница', validation:v, params:{ totalHeight, projection, stairWidth, steps, rise, run, angle, waste, stairType:labelMap(stairType), stepMaterial:labelMap(stepMaterial), hasRailing, paint, mount }, groups, purchase, additionalMaterials, time, risks, rawLen, basisValue:steps, basisLabel:'ступ.' });
+    return finalizeResult({ product:'Лестница', validation:v, params:{ totalHeight, projection, stairWidth, steps, rise, run, angle, waste, stairType:labelMap(stairType), stepMaterialRaw:stepMaterial, stepMaterial:labelMap(stepMaterial), hasRailing, paint, mount }, groups, purchase, additionalMaterials, time, risks, rawLen, basisValue:steps, basisLabel:'ступ.' });
   }
 
   function labelMap(value){
@@ -783,19 +1102,51 @@
     const map = { none:'отдельностоящий', back:'одна стена (сзади)', back_left:'две стены (угол)', three:'три стены (П-образный)' };
     return map[value] || value;
   }
+  function roleDaysFor(row){
+    if(!row || !row.enabled) return 0;
+    if(row.paymentType === 'day') return Math.max(0, row.days);
+    if(row.hours > 0) return Math.ceil(row.hours / 7);
+    return 0;
+  }
   function finalizeResult(input){
     const ws = workSettings();
     const totalHours = input.time.reduce((s,t)=>s+t.hours,0);
-    const days = Math.max(1, Math.ceil(totalHours / (ws.workers*7)));
+    const rolesCfg = readRolesConfig();
+    const autoHours = computeRoleAutoHours(input.time, rolesCfg);
+    const roleRows = ROLE_DEFS.map(def=>{
+      const cfg = rolesCfg[def.key];
+      let hours = 0, cost = 0;
+      if(cfg.enabled){
+        hours = roleEffectiveHours(def.key, autoHours);
+        if(cfg.paymentType === 'hour'){
+          cost = cfg.people * cfg.rate * hours;
+        } else if(cfg.paymentType === 'day'){
+          cost = cfg.people * cfg.rate * cfg.days;
+        } else {
+          cost = cfg.sum;
+        }
+      }
+      return Object.assign({}, cfg, { hours, cost });
+    });
+    const enabledRoleRows = roleRows.filter(r=>r.enabled);
+    const laborCost = enabledRoleRows.reduce((s,r)=>s+r.cost,0);
+    const totalPeople = Math.max(1, enabledRoleRows.reduce((s,r)=>s+r.people,0));
+    // Срок: сварщик, маляр и монтажник идут последовательно (нельзя красить невыполненную сварку,
+    // нельзя монтировать непросохшую краску). Разнорабочий работает параллельно с остальными —
+    // не продлевает и не сокращает срок сам по себе. Роль без часов (не участвует в операциях
+    // этого изделия) добавляет 0 дней, а не «лишнего человека» в общий знаменатель.
+    const sequentialKeys = ['welder','painter','mounter'];
+    const days = Math.max(1, sequentialKeys.reduce((sum,key)=>sum + roleDaysFor(roleRows.find(r=>r.key===key)), 0));
     const additionalCost = input.additionalMaterials.reduce((s,a)=>s+a.cost,0);
     const consumablesCost = ws.consumablesFixed + input.basisValue * ws.consumablesRate;
     const materialsCost = input.purchase.metalCost + additionalCost;
-    const materialsClientCost = materialsCost * (1 + ws.materialMarkup/100);
-    const laborCost = totalHours * ws.hourRate;
-    const laborClientCost = laborCost * (1 + ws.laborMarkup/100);
+    const materialsClientCost = applyMarkup(materialsCost, ws.materialMarkupType, ws.materialMarkupValue);
+    const laborClientCost = applyMarkup(laborCost, ws.laborMarkupType, ws.laborMarkupValue);
     const clientPrice = materialsClientCost + laborClientCost + consumablesCost;
+    const costPrice = materialsCost + laborCost + consumablesCost;
+    const margin = clientPrice - costPrice;
     const riskLevel = input.risks.some(r=>r.level==='high') ? 'Высокий' : input.risks.some(r=>r.level==='mid') ? 'Средний' : 'Низкий';
-    return Object.assign(input, { settings:ws, totalHours, days, additionalCost, consumablesCost, materialsCost, materialsClientCost, laborCost, laborClientCost, clientPrice, riskLevel, buildDate:BUILD_DATE });
+    return Object.assign(input, { settings:ws, totalHours, days, totalPeople, roleRows, additionalCost, consumablesCost, materialsCost, materialsClientCost, laborCost, laborClientCost, costPrice, margin, clientPrice, riskLevel, buildDate:BUILD_DATE });
   }
 
   function calculate(){
@@ -824,6 +1175,7 @@
     $('schemeContainer').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('purchaseList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('timeList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('riskList').innerHTML='<p class="mini">Исправьте данные и нажмите «Рассчитать».</p>'; $('quoteText').textContent='Исправьте данные и повторите расчёт.';
   }
   function renderResult(r){
+    refreshRoleAutoHours(r);
     $('clientPrice').textContent = money(r.clientPrice);
     $('totalNeeded').textContent = m(r.purchase.totalNeeded);
     $('totalSticks').textContent = r.purchase.totalSticks + ' шт.';
@@ -831,8 +1183,13 @@
     $('totalWeight').textContent = kg(r.purchase.totalWeight);
     $('totalHours').textContent = fmt(r.totalHours,1) + ' ч';
     $('totalDays').textContent = r.days + ' ' + pluralDays(r.days);
+    $('costBreakdown').innerHTML = costBreakdownHtml(r);
     $('purchaseList').innerHTML = r.purchase.lines.map(line=>`<div class="line-card"><h4>${line.profile}</h4><p class="mini">Входит: ${line.labels.join(', ')}</p><div class="line-grid"><div><b>Нужно</b>${m(line.lengthWithWaste)}</div><div><b>Хлыстов</b>${line.sticks} шт.</div><div><b>Куплено</b>${m(line.purchasedMeters)}</div><div><b>Остаток</b>${m(line.leftoverMeters)}</div><div><b>Вес</b>${kg(line.weight)}</div><div><b>Закупка</b>${money(line.purchaseCost)}</div></div></div>`).join('') + additionalMaterialsHtml(r);
-    $('timeList').innerHTML = `<table class="time-table">${r.time.map(t=>`<tr><td>${t.label}</td><td>${fmt(t.hours,1)} ч</td></tr>`).join('')}</table><div class="note">Итого: <strong>${fmt(r.totalHours,1)} чел-часов</strong> · ${r.days} ${pluralDays(r.days)} при ${r.settings.workers} ${pluralWorkers(r.settings.workers)}.</div>`;
+    $('timeList').innerHTML = `<table class="time-table">${r.time.map((t,i)=>`<tr><td>${t.label}${t.overridden?' <span class="time-manual">вручную</span>':''}</td><td class="time-input-cell"><input type="text" inputmode="decimal" class="time-input" data-time-label="${t.label.replace(/"/g,'&quot;')}" value="${fmt(t.hours,1)}"><span class="time-unit">ч</span></td></tr>`).join('')}</table>`
+      + `<div class="time-foot"><span class="note-inline">Итого: <strong>${fmt(r.totalHours,1)} чел-часов</strong> · срок: ${r.days} ${pluralDays(r.days)} по ролям</span>${hasTimeOverrides()?'<button type="button" class="btn secondary time-reset-btn" id="resetTimeBtn">Сбросить к авто</button>':''}</div>`
+      + `<p class="mini" style="margin-top:6px">Срок считается по ролям: сварка, покраска и монтаж идут последовательно. Помощник не сокращает срок автоматически.</p>`
+      + `<p class="mini" style="margin-top:6px">Часы можно поправить вручную — изменённое значение используется в расчёте цены и срока.</p>`;
+    attachTimeInputs();
     if(r.risks.length){
       $('riskList').innerHTML = r.risks.map(x=>{
         const cls = x.level==='high'?'high':x.level==='info'?'info':'mid';
@@ -849,6 +1206,40 @@
     let html='';
     r.additionalMaterials.forEach(a=>{ html += `<div class="line-card"><h4>${a.label}</h4><div class="line-grid"><div><b>Объём</b>${a.qty}</div><div><b>Стоимость</b>${money(a.cost)}</div></div></div>`; });
     html += `<div class="note">Металл: ${money(r.purchase.metalCost)} · Доп. материалы: ${money(r.additionalCost)} · Расходники: ${money(r.consumablesCost)}</div>`;
+    return html;
+  }
+  function roleResultLabel(key){
+    const map = { welder:'Работа сварщика', painter:'Покраска / маляр', mounter:'Монтаж / установщик', helper:'Разнорабочий / помощник' };
+    return map[key] || key;
+  }
+  function roleQuoteLabel(key){
+    const map = { welder:'Сварщик', painter:'Маляр', mounter:'Установщик / монтажник', helper:'Разнорабочий / помощник' };
+    return map[key] || key;
+  }
+  function pluralPeople(n){
+    const x = Math.abs(Math.round(n));
+    const mod10 = x % 10, mod100 = x % 100;
+    if(mod100 >= 11 && mod100 <= 14) return 'человек';
+    if(mod10 === 1) return 'человек';
+    if(mod10 >= 2 && mod10 <= 4) return 'человека';
+    return 'человек';
+  }
+  function roleFormatLine(x){
+    if(x.paymentType === 'hour') return `${x.people} ${pluralPeople(x.people)} × ${money(x.rate)}/час × ${fmt(x.hours,1)} ч = ${money(x.cost)}`;
+    if(x.paymentType === 'day') return `${x.people} ${pluralPeople(x.people)} × ${money(x.rate)}/день × ${x.days} ${pluralDays(x.days)} = ${money(x.cost)}`;
+    return `${money(x.cost)} за заказ`;
+  }
+  function costBreakdownHtml(r){
+    const rows = [{ label:'Материалы', value:r.materialsClientCost }];
+    r.roleRows.filter(x=>x.enabled && x.cost>0).forEach(x=>{
+      const share = r.laborCost>0 ? (x.cost / r.laborCost) * r.laborClientCost : 0;
+      rows.push({ label:roleResultLabel(x.key), value:share });
+    });
+    rows.push({ label:'Расходники', value:r.consumablesCost });
+    let html = rows.map(x=>`<div class="cost-row"><span>${x.label}</span><b>${money(x.value)}</b></div>`).join('');
+    html += `<div class="cost-row"><span>Себестоимость</span><b>${money(r.costPrice)}</b></div>`;
+    html += `<div class="cost-row"><span>Маржа</span><b>${money(r.margin)}</b></div>`;
+    html += `<div class="cost-row total"><span>Цена клиенту</span><b>${money(r.clientPrice)}</b></div>`;
     return html;
   }
   function paramsRu(r){
@@ -870,15 +1261,16 @@
       `Покраска: ${p.paint?'да':'нет'}`,
       `Монтаж: ${p.mount?'да':'нет'}`
     ];
-    if(r.product==='Перила') return [`Длина: ${fmt(p.length,2)} м`,`Высота: ${fmt(p.height,2)} м`,`Шаг стоек: ${fmt(p.postStep,2)} м`,`Тип: ${p.railingType}`,`Заполнение: ${p.fillInfo}`,`Крепление: ${p.mountType}`,`Запас на резку: ${fmt(p.waste,0)}%`,`Покраска: ${p.paint?'да':'нет'}`,`Монтаж: ${p.mount?'да':'нет'}`];
+    if(r.product==='Перила') return [`Горизонтальная длина (проекция): ${fmt(p.length,2)} м`,`Высота: ${fmt(p.height,2)} м`,`Шаг стоек: ${fmt(p.postStep,2)} м`,`Угол перил: ${p.railingAngle>0?fmt(p.railingAngle,0)+'°':'0° / прямые'}`,`Тип: ${p.railingType}`,`Заполнение: ${p.fillInfo}`,`Крепление: ${p.mountType}`,`Запас на резку: ${fmt(p.waste,0)}%`,`Покраска: ${p.paint?'да':'нет'}`,`Монтаж: ${p.mount?'да':'нет'}`];
     return [`Высота подъёма: ${fmt(p.totalHeight,2)} м`,`Длина проекции: ${fmt(p.projection,2)} м`,`Ширина: ${fmt(p.stairWidth,2)} м`,`Ступеней: ${p.steps}`,`Высота ступени: ${fmt(p.rise,2)} м`,`Глубина ступени: ${fmt(p.run,2)} м`,`Угол: ${fmt(p.angle,1)}°`,`Тип: ${p.stairType}`,`Материал ступеней: ${p.stepMaterial}`,`Перила: ${p.hasRailing?'да':'нет'}`,`Запас на резку: ${fmt(p.waste,0)}%`,`Покраска: ${p.paint?'да':'нет'}`,`Монтаж: ${p.mount?'да':'нет'}`];
   }
 
   function escSvg(value){
     return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   }
-  function svgText(x,y,text,cls='scheme-label',anchor='middle'){
-    return `<text x="${x}" y="${y}" text-anchor="${anchor}" class="${cls}">${escSvg(text)}</text>`;
+  function svgText(x,y,text,cls='scheme-label',anchor='middle',rotate){
+    const t = rotate ? ` transform="rotate(${rotate} ${x} ${y})"` : '';
+    return `<text x="${x}" y="${y}" text-anchor="${anchor}" class="${cls}"${t}>${escSvg(text)}</text>`;
   }
   function svgLine(x1,y1,x2,y2,cls='scheme-element'){
     return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${cls}"/>`;
@@ -894,9 +1286,13 @@
   }
   function svgDimLine(x1,y1,x2,y2,label){
     const midX=(x1+x2)/2, midY=(y1+y2)/2;
-    const textY = Math.abs(y1-y2) < 1 ? midY-6 : midY;
-    const textX = Math.abs(x1-x2) < 1 ? midX+12 : midX;
-    return `${svgLine(x1,y1,x2,y2,'scheme-dim')}${svgText(textX,textY,label,'scheme-small', Math.abs(x1-x2)<1 ? 'start' : 'middle')}`;
+    const isVertical = Math.abs(x1-x2) < 1;
+    const line = svgLine(x1,y1,x2,y2,'scheme-dim');
+    if(isVertical){
+      // Текст идёт вдоль линии (повёрнут на -90°), сбоку от неё — не пересекает конструкцию
+      return line + svgText(midX-7, midY, label, 'scheme-dimtext', 'middle', -90);
+    }
+    return line + svgText(midX, midY-9, label, 'scheme-dimtext', 'middle');
   }
   function schemeBox(title, subtitle, svg){
     return `<div class="scheme-box"><div class="scheme-title"><strong>${escSvg(title)}</strong><span>${escSvg(subtitle)}</span></div>${svg}</div>`;
@@ -922,6 +1318,10 @@
     const wallSide = p.wallSide || 'none';
     const postCount = Math.max(2, Math.round(p.posts || 4));
     const crossCount = Math.max(2, Math.ceil(D / Math.max(0.3, p.crossStep)) + 1);
+    const actualPostCount = Math.max(2, (p.frontPostCount || 0) + (p.backPostCount || 0));
+    const postSchemeLabel = wallSide === 'none'
+      ? `стойки: ${actualPostCount}`
+      : `стойки у края: ${p.frontPostCount || actualPostCount} + пристенный прогон`;
 
     // ── ВИД СВЕРХУ ─────────────────────────────────────────────────────
     const tW=240, tH=130, tx0=48, ty0=40;
@@ -950,7 +1350,7 @@
       // пристенный прогон — жирная линия по задней стороне
       top += svgLine(tx0,ty0,tx0+tW,ty0,'scheme-element');
       // засечки анкеров
-      ptsBack.forEach(pt=>{ top += svgLine(pt[0]-5,pt[1]-5,pt[0]+5,pt[1]+5,'scheme-dim'); top += svgLine(pt[0]+5,pt[1]-5,pt[0]-5,pt[1]+5,'scheme-dim'); });
+      ptsBack.forEach(pt=>{ top += svgLine(pt[0]-5,pt[1]-5,pt[0]+5,pt[1]+5,'scheme-wall'); top += svgLine(pt[0]+5,pt[1]-5,pt[0]-5,pt[1]+5,'scheme-wall'); });
       // боковые стены если угол или П-образный
       if(wallSide==='back_left' || wallSide==='three'){
         top += svgLine(tx0,ty0,tx0,ty0+tH,'scheme-element');
@@ -960,21 +1360,21 @@
       }
       // Обозначение стены: штриховка
       const hatchY = ty0-8;
-      for(let x=tx0;x<=tx0+tW;x+=12) top += svgLine(x,hatchY,x+6,hatchY+6,'scheme-dim');
-      top += svgLine(tx0,hatchY,tx0+tW,hatchY,'scheme-thin');
+      for(let x=tx0;x<=tx0+tW;x+=12) top += svgLine(x,hatchY,x+6,hatchY+6,'scheme-wall');
+      top += svgLine(tx0,hatchY,tx0+tW,hatchY,'scheme-wall');
       if(wallSide==='back_left'||wallSide==='three'){
-        for(let y=ty0;y<=ty0+tH;y+=12) top += svgLine(tx0-8,y,tx0-2,y+6,'scheme-dim');
-        top += svgLine(tx0-8,ty0,tx0-8,ty0+tH,'scheme-thin');
+        for(let y=ty0;y<=ty0+tH;y+=12) top += svgLine(tx0-8,y,tx0-2,y+6,'scheme-wall');
+        top += svgLine(tx0-8,ty0,tx0-8,ty0+tH,'scheme-wall');
       }
       if(wallSide==='three'){
-        for(let y=ty0;y<=ty0+tH;y+=12) top += svgLine(tx0+tW+8,y,tx0+tW+2,y+6,'scheme-dim');
-        top += svgLine(tx0+tW+8,ty0,tx0+tW+8,ty0+tH,'scheme-thin');
+        for(let y=ty0;y<=ty0+tH;y+=12) top += svgLine(tx0+tW+8,y,tx0+tW+2,y+6,'scheme-wall');
+        top += svgLine(tx0+tW+8,ty0,tx0+tW+8,ty0+tH,'scheme-wall');
       }
     }
     top += svgDimLine(tx0,ty0+tH+22,tx0+tW,ty0+tH+22,`ширина ${fmt(W,2)} м`);
     top += svgDimLine(tx0-20,ty0,tx0-20,ty0+tH,`вылет ${fmt(D,2)} м`);
     const wallLabel = {none:'отдельностоящий',back:'примыкание: 1 стена',back_left:'примыкание: 2 стены (угол)',three:'П-образный (3 стены)'}[wallSide]||'';
-    top += svgText(tx0+tW/2,26,`Вид сверху · стойки: ${postCount} · поперечины: ${crossCount}`,'scheme-label');
+    top += svgText(tx0+tW/2,26,`Вид сверху · ${postSchemeLabel} · поперечины: ${crossCount}`,'scheme-label');
     top += svgText(tx0+tW/2,210,wallLabel,'scheme-small');
     const topSvg = wrapSvg('0 0 330 225', top);
 
@@ -1008,26 +1408,30 @@
       side += svgCircle(sx1+10, py_wall, 3, 'scheme-post');
     }
 
-    // Скатная кровля + заливка
+    // Скатная кровля + заливка (цвет зависит от материала покрытия)
     side += svgLine(sx0, py_edge, sx1, py_wall, 'scheme-element');
-    side += `<polygon points="${sx0},${py_edge} ${sx1},${py_wall} ${sx1},${py_wall+10} ${sx0},${py_edge+10}" class="scheme-fill" opacity="0.45"/>`;
+    const coverFillCls = p.coverType==='prof' ? 'scheme-fill-prof' : p.coverType==='metalTile' ? 'scheme-fill-tile' : 'scheme-fill';
+    side += `<polygon points="${sx0},${py_edge} ${sx1},${py_wall} ${sx1},${py_wall+10} ${sx0},${py_edge+10}" class="${coverFillCls}" opacity="0.55"/>`;
 
     // Размерные линии высот (всегда обе оси, слева)
     side += svgDimLine(sx0-18, sy0, sx0-18, py_edge, `${fmt(Hedge,2)} м`);
     if(diff > 0.02){
-      side += svgLine(sx0-32, py_wall, sx0-32, sy0, 'scheme-dim');
-      side += svgLine(sx0-36, sy0, sx0-28, sy0, 'scheme-thin');
-      side += svgLine(sx0-36, py_wall, sx0-28, py_wall, 'scheme-thin');
-      side += svgText(sx0-34, (sy0+py_wall)/2+4, `${fmt(Hwall,2)} м`, 'scheme-small', 'end');
+      side += svgLine(sx0-34, py_wall, sx0-34, sy0, 'scheme-dim');
+      side += svgLine(sx0-38, sy0, sx0-30, sy0, 'scheme-thin');
+      side += svgLine(sx0-38, py_wall, sx0-30, py_wall, 'scheme-thin');
+      side += svgText(sx0-34, (sy0+py_wall)/2, `${fmt(Hwall,2)} м`, 'scheme-dimtext', 'middle', -90);
     }
     side += svgDimLine(sx0, sy0+22, sx1, sy0+22, `вылет ${fmt(D,2)} м`);
 
-    // Угол уклона / плоская
+    // Угол уклона / плоская — подпись строго рядом с линией ската, не пересекая её
     if(p.roofAngleDeg > 0.5){
-      const lowerPy = Math.max(py_edge, py_wall);
-      side += svgText(sx0+30, lowerPy+12, `${fmt(p.roofAngleDeg,1)}°`, 'scheme-warn');
+      const at = 0.20;
+      const lineYAt = py_edge + (py_wall - py_edge) * at;
+      const angleX = sx0 + sW * at;
+      const angleY = lineYAt - 13;
+      side += svgText(angleX, angleY, `${fmt(p.roofAngleDeg,1)}°`, 'scheme-warn');
     } else {
-      side += svgText(sx0+sW/2, py_edge-8, 'плоская кровля', 'scheme-warn');
+      side += svgText(sx0+sW/2, py_edge-12, 'плоская кровля', 'scheme-warn');
     }
 
     // Подписи
@@ -1042,33 +1446,57 @@
   function renderPerilaScheme(r){
     const p = r.params;
     const L = Math.max(0.1,p.length), H = Math.max(0.1,p.height), postStep = Math.max(0.3,p.postStep || 1);
+    const angle = Math.max(0, Math.min(60, p.railingAngle || 0));
     const postsCount = Math.ceil(L/postStep)+1;
-    const x0=38, yTop=55, w=254, h=105, yBot=yTop+h;
+    const x0=44, w=244;
+    // Базовая линия пола: при угле наклоняем верх. Левый низ пола фиксирован.
+    const yFloorL = 178;                         // пол слева
+    const angleRad = angle * Math.PI/180;
+    const totalRise = Math.min(86, w * Math.tan(angleRad)); // подъём пола справа (ограничен)
+    const yFloorR = yFloorL - totalRise;          // пол справа выше при наклоне
+    const ph = 92;                                // высота перил в пикселях (фикс для читаемости)
     let s='';
-    s += svgLine(x0,yTop,x0+w,yTop,'scheme-element');
-    s += svgLine(x0,yBot,x0+w,yBot,'scheme-thin');
+    // Пол (наклонный при угле)
+    s += svgLine(x0,yFloorL,x0+w,yFloorR,'scheme-thin');
+    // Поручень — параллельно полу, выше на ph (цвет отличает поручень от стоек)
+    const yRailL = yFloorL - ph, yRailR = yFloorR - ph;
+    s += svgLine(x0,yRailL,x0+w,yRailR,'scheme-rail');
+    // Стойки — вертикальные, от пола до поручня
     for(let i=0;i<postsCount;i++){
-      const x=x0 + w*i/Math.max(1,postsCount-1);
-      s += svgLine(x,yTop,x,yBot,'scheme-element');
+      const t = i/Math.max(1,postsCount-1);
+      const x = x0 + w*t;
+      const yFloor = yFloorL - totalRise*t;
+      const yRail = yFloor - ph;
+      s += svgLine(x,yFloor,x,yRail,'scheme-element');
     }
+    // Заполнение
     if(String(p.fillInfo||'').includes('вертик')){
-      const count = Math.min(16, Math.max(2, Math.ceil(L/Math.max(0.12, inputNumber('fillStep',0.15)))));
+      const count = Math.min(18, Math.max(2, Math.ceil(L/Math.max(0.12, inputNumber('fillStep',0.15)))));
       for(let i=1;i<count;i++){
-        const x=x0 + w*i/count;
-        s += svgLine(x,yTop+15,x,yBot-12,'scheme-thin');
+        const t=i/count;
+        const x=x0 + w*t;
+        const yFloor=yFloorL - totalRise*t;
+        s += svgLine(x,yFloor-6,x,yFloor-ph+8,'scheme-thin');
       }
     } else if(String(p.fillInfo||'').includes('гориз')){
       const rows = Math.min(6, Math.max(1, Math.round(inputNumber('horizontalRows',3))));
       for(let i=1;i<=rows;i++){
-        const y=yTop + h*i/(rows+1);
-        s += svgLine(x0,y,x0+w,y,'scheme-thin');
+        const off = ph*i/(rows+1);
+        s += svgLine(x0,yFloorL-off,x0+w,yFloorR-off,'scheme-thin');
       }
     }
-    s += svgDimLine(x0,yBot+24,x0+w,yBot+24,`длина ${fmt(L,2)} м`);
-    s += svgDimLine(x0-18,yTop,x0-18,yBot,`высота ${fmt(H,2)} м`);
-    s += svgText(x0+w/2,30,`Вид спереди · стойки: ${postsCount}`,'scheme-label');
-    s += svgText(x0+w/2,190,`шаг стоек ${fmt(postStep,2)} м · ${p.fillInfo}`,'scheme-small');
-    return schemeBox('Перила — вид спереди', `${fmt(L,2)} м · ${fmt(H,2)} м`, wrapSvg('0 0 330 215', s));
+    // Размерные линии
+    s += svgDimLine(x0,yFloorL+24,x0+w,yFloorL+24,`длина (проекция) ${fmt(L,2)} м`);
+    s += svgDimLine(x0-18,yFloorL-ph,x0-18,yFloorL,`${fmt(H,2)} м`);
+    // Угол — позиция точно над линией пола, не пересекает её
+    if(angle>0){
+      const at = 0.16;
+      const floorYAt = yFloorL - totalRise*at;
+      s += svgText(x0+w*at, floorYAt-12, `угол ${fmt(angle,0)}°`, 'scheme-warn');
+    }
+    s += svgText(x0+w/2,28,`Вид сбоку · стойки: ${postsCount}${angle>0?' · наклон '+fmt(angle,0)+'°':''}`,'scheme-label');
+    s += svgText(x0+w/2,212,`шаг стоек ${fmt(postStep,2)} м · ${p.fillInfo}`,'scheme-small');
+    return schemeBox('Перила — '+(angle>0?'наклонные':'вид спереди'), `${fmt(L,2)} м · ${fmt(H,2)} м${angle>0?' · '+fmt(angle,0)+'°':''}`, wrapSvg('0 0 330 224', s));
   }
   function renderLestnicaScheme(r){
     const p = r.params;
@@ -1082,19 +1510,28 @@
       if(i===0) pts.push([x,y]);
       else { pts.push([x, pts[pts.length-1][1]]); pts.push([x,y]); }
     }
+    // Заливка под лестницей цветом материала ступеней
+    const stepFillCls = p.stepMaterialRaw==='wood' ? 'scheme-step-wood' : p.stepMaterialRaw==='concrete' ? 'scheme-step-concrete' : 'scheme-step-metal';
+    const fillPts = [...pts, [x0+w,y0], [x0,y0]];
+    s += `<polygon points="${fillPts.map(pt=>pt.join(',')).join(' ')}" class="${stepFillCls}" opacity="0.55"/>`;
     s += svgPolyline(pts,'scheme-element');
     s += svgLine(x0,y0,x0+w,y0-h,'scheme-element');
     s += svgLine(x0,y0,x0+w,y0,'scheme-thin');
     s += svgLine(x0+w,y0,x0+w,y0-h,'scheme-thin');
     if(p.hasRailing){
-      s += svgLine(x0+10,y0-28,x0+w-5,y0-h-28,'scheme-thin');
-      s += svgLine(x0+25,y0-15,x0+25,y0-42,'scheme-thin');
-      s += svgLine(x0+w-25,y0-h-15,x0+w-25,y0-h-42,'scheme-thin');
+      s += svgLine(x0+10,y0-28,x0+w-5,y0-h-28,'scheme-rail');
+      s += svgLine(x0+25,y0-15,x0+25,y0-42,'scheme-rail');
+      s += svgLine(x0+w-25,y0-h-15,x0+w-25,y0-h-42,'scheme-rail');
     }
     s += svgDimLine(x0,y0+24,x0+w,y0+24,`проекция ${fmt(projection,2)} м`);
     s += svgDimLine(x0-18,y0-h,x0-18,y0,`подъём ${fmt(height,2)} м`);
     s += svgText(165,26,`Боковая схема · ${steps} ступ.`,'scheme-label');
-    s += svgText(110,145,`угол ${fmt(p.angle,1)}°`,'scheme-warn');
+    // Угол — в коридоре над косоуром (и под перилами, если они есть), не задевает ступени
+    const at = 0.30;
+    const stringerYAt = y0 - h*at;
+    const angleX = x0 + w*at;
+    const angleY = stringerYAt - (p.hasRailing ? 14 : 16);
+    s += svgText(angleX,angleY,`угол ${fmt(p.angle,1)}°`,'scheme-warn');
     s += svgText(165,198,`ступень: ${fmt(p.rise,2)} м × ${fmt(p.run,2)} м`,'scheme-small');
     return schemeBox('Лестница — вид сбоку', `угол ${fmt(p.angle,1)}°`, wrapSvg('0 0 330 220', s));
   }
@@ -1106,7 +1543,7 @@
     const comment = inputText('clientComment','').trim() || '—';
     const lines = [];
     lines.push('КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ');
-    lines.push('Metal OS / Welding OS v0.10');
+    lines.push('Metal OS / Welding OS v0.14.1');
     lines.push('');
     lines.push(`Изделие: ${r.product}`);
     lines.push(`Клиент: ${client}`);
@@ -1126,7 +1563,15 @@
     lines.push('Работы:');
     r.time.forEach(t=>lines.push(`— ${t.label}: ${fmt(t.hours,1)} ч`));
     lines.push(`— Итого: ${fmt(r.totalHours,1)} чел-часов`);
-    lines.push(`— Ориентировочный срок: ${r.days} ${pluralDays(r.days)} при ${r.settings.workers} ${pluralWorkers(r.settings.workers)}`);
+    lines.push('');
+    lines.push('Работа и оплата:');
+    const kpRoles = r.roleRows.filter(x=>x.enabled && x.cost>0);
+    if(kpRoles.length){
+      kpRoles.forEach(x=>lines.push(`— ${roleQuoteLabel(x.key)}: ${roleFormatLine(x)}`));
+    } else {
+      lines.push('— Работа не учтена в цене (роли не включены).');
+    }
+    lines.push(`— Ориентировочный срок: ${r.days} ${pluralDays(r.days)} по ролям: сварка, покраска и монтаж считаются последовательно`);
     lines.push('');
     lines.push('Стоимость:');
     lines.push(`— Материалы с наценкой: ${money(r.materialsClientCost)}`);
@@ -1164,10 +1609,10 @@
     reader.readAsDataURL(file);
   }
   function boot(){
-    loadSettings();
-    renderPrices();
+    renderRolesSection();
     setProduct('naves');
     setPreset('standard');
+    loadSettings();
     attachNumericSanitizers();
     document.querySelectorAll('[data-product]').forEach(btn=>btn.addEventListener('click',()=>setProduct(btn.dataset.product)));
     document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>setPreset(btn.dataset.preset)));
