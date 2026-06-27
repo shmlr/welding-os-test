@@ -1,31 +1,27 @@
-{
-  "name": "Metal OS / Welding OS",
-  "short_name": "Metal OS",
-  "description": "Расчёт металлоконструкций, навесов, ферм, перил, лестниц и КП для клиента.",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f2f0ea",
-  "theme_color": "#111111",
-  "icons": [
-    {
-      "src": "assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ]
-}
+# Metal OS / Welding OS v0.16
+
+Готовый пакет для GitHub Pages.
+
+## Состав
+
+- `index.html` — приложение v0.16
+- `manifest.webmanifest` — manifest для установки на мобильный рабочий стол
+- `assets/logo.png`
+- `assets/icon-192.png`
+- `assets/icon-512.png`
+- `assets/apple-touch-icon.png`
+- `assets/telegram-cover.png`
+
+## Главное в v0.16
+
+- Добавлен блок `Фермы навеса`
+- Поддержаны несколько групп ферм в одном навесе
+- Типы ферм: прямая, односкатная, двускатная, арочная, консольная, комбинированная, пользовательская
+- Схемы решётки: треугольная, вертикальная, диагональная, Warren, Pratt, веерная, декоративная, усиленная, пользовательская
+- Фермы попадают в расчёт металла, хлыстов 6 м, веса, стоимости и КП
+- Фермы отображаются в SVG-схеме: общая схема + мини-схемы групп
+- Добавлены иконки для установки приложения на мобильный рабочий стол
+
+## Важно
+
+Расчёт ферм предварительный — для закупки металла и КП. Несущая способность, снеговая и ветровая нагрузка требуют отдельной инженерной проверки.
